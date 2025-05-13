@@ -1,11 +1,22 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(RepoForCMake)
+project(TEST)
  
+# set c++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(main main.cpp)
+# set include path
+include_directories(${PROJECT_SOURCE_DIR}/include
+                    ${PROJECT_SOURCE_DIR}/utils)
 
-target_include_directories(main PRIVATE ${PROJECT_SOURCE_DIR/include})
+# get source cpp                     
+set(TESTSOURCES examples/test.cpp kernels/vector_cpu.cpp)
+set(MAINSOURCES examples/main.cpp)
+
+add_executable(test ${TESTSOURCES})
+add_executable(main ${MAINSOURCES})
+ 
 
 #include several header file from different directories.
 # target_include_directories(myapp PRIVATE

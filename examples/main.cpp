@@ -1,5 +1,5 @@
-#include "include/log.h" 
-#include "include/entity.h"
+#include "log.h" 
+#include "entity.h"
 #include<string>
 using std::string;
 int g_variable = 6;
