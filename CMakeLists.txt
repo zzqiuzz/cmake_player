@@ -11,7 +11,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include
                     ${PROJECT_SOURCE_DIR}/utils)
 
 # get source cpp                     
-set(TESTSOURCES examples/test.cpp kernels/vector_cpu.cpp)
+set(TESTSOURCES examples/test.cpp kernels/vector_add.cpp)
 set(MAINSOURCES examples/main.cpp)
 
 add_executable(test ${TESTSOURCES})
