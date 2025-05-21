@@ -16,9 +16,5 @@ include_directories(${PROJECT_SOURCE_DIR}/include
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../bin)
 
 # 添加主程序
-add_executable(test examples/vector_add.cpp kernels/vector_add.cu) 
+add_executable(test examples/demo.cpp kernels/demo.cu) 
 target_compile_options(test PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-g -G>)
-
-
-
-# Terminal -> run task -> cmake --build
