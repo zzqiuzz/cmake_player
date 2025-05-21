@@ -3,10 +3,11 @@
 #include <iostream>
 
 // CUDA核函数：两个向量相加
-__global__ void vectorAdd(int* a, int* b, int* c, int n) {
-    int i = threadIdx.x;
-    if (i < n) {
-        c[i] = a[i] + b[i];
+__global__ void vectorAdd(int* a, int* b, int* c, int n) { 
+    int tid = threadIdx.x + blockIdx.x * blockDim.x;
+
+    if (tid < n) {
+        c[tid] = a[tid] + b[tid]; 
     }
 }
 
@@ -21,9 +22,9 @@ void runVectorAdd(int n) {
     c = new int[n];
 
     // 初始化输入数据
-    for (int i = 0; i < n; ++i) {
-        a[i] = i;
-        b[i] = i * 2;
+    for (int i = 0; i < n; ++i) { 
+        a[i] = 0;
+        b[i] = i; 
     }
 
     // 分配设备内存
@@ -34,9 +35,16 @@ void runVectorAdd(int n) {
     // 将数据从主机复制到设备
     cudaMemcpy(d_a, a, n * sizeof(int), cudaMemcpyHostToDevice);
     cudaMemcpy(d_b, b, n * sizeof(int), cudaMemcpyHostToDevice);
+ 
+ 
+    dim3 block(256); // 三维数组， block.x = 256, block.y = 1, block.z = 1
+    dim3 grid((n + block.x - 1) / block.x);// 三维数组， grid.x = (n + block.x - 1) / block.x, grid.y = 1, grid.z = 1
+    // 计算网格和块的大小
+    // 这里的 grid.x 是计算出的网格大小， block.x 是块大小 
+    printf("Grid size: %d, Block size: %d\n", grid.x, block.x);
 
     // 启动核函数
-    vectorAdd<<<1, n>>>(d_a, d_b, d_c, n);
+    vectorAdd<<<grid, block>>>(d_a, d_b, d_c, n); 
 
     // 将结果从设备复制回主机
     cudaMemcpy(c, d_c, n * sizeof(int), cudaMemcpyDeviceToHost);

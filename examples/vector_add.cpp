@@ -6,7 +6,7 @@
 #include "vector_add.h"
 
 int main() {
-    int n = 1 << 10; // 向量长度
+    int n = 1025; // 向量长度
     std::cout << "Running vector addition on GPU..." << std::endl;
     runVectorAdd(n);
     return 0;
