@@ -26,6 +26,9 @@ target_compile_options(vector_add PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-g -G>)
 add_executable(matrix_add examples/matrix_add.cpp kernels/matrix_add.cu) 
 target_compile_options(matrix_add PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-g -G>)
 
+add_executable(reduce examples/reduce.cpp kernels/reduce.cu) 
+target_compile_options(reduce PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-g -G>)
+
  
 
 # Terminal -> run task -> cmake --build
