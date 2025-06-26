@@ -6,7 +6,8 @@
 #define ThreadPerBlock 256
 
 int main(int argc, char *argv[]){
-    const int N = 32 * 1024 * 1024; 
+    // const int N = 32 * 1024 * 1024; 
+    const int N = 257;
     int blockNum =(N + ThreadPerBlock - 1) / ThreadPerBlock;
 
     /*-----------------------------compute on cpu------------------------*/
@@ -17,8 +18,10 @@ int main(int argc, char *argv[]){
     float *out = (float*)malloc(blockNum * sizeof(float));
     for(int i = 0; i < blockNum; i++){
         float cur_per_block_sum = 0.f;
-        for(int j = 0; j < ThreadPerBlock; j++)
-            cur_per_block_sum += host_input_data[i * ThreadPerBlock + j];
+        for(int j = 0; j < ThreadPerBlock; j++){
+            if(i * ThreadPerBlock + j < N)
+                cur_per_block_sum += host_input_data[i * ThreadPerBlock + j];
+        }
         out[i] = cur_per_block_sum;
     }
 

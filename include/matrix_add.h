@@ -3,7 +3,7 @@
 
 #include<cuda.h>
 #include<cuda_runtime.h>
-#include<iostream>
+#include<iostream> 
 using std::cout;
 using std::endl;
 
@@ -26,5 +26,30 @@ void print_matrix(float *matrix, int nx, int ny){
     } 
 }
 
+void matmul_cpu(float *a, float *b, float *result, int m, int n, int k) {
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            result[i * n + j] = 0.0f;
+            for (int l = 0; l < k; l++) {
+                result[i * n + j] += a[i * k + l] * b[l * n + j];
+            }
+        }
+    }
+}
+
+void check(float *a, float *b, int m, int n, int k) {
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (a[i * n + j] != b[i * n + j]) {
+                cout << "Mismatch at (" << i << ", " << j << "): "
+                     << a[i * n + j] << " != " << b[i * n + j] << endl;
+                return;
+            }
+        }
+    }
+    cout << "Matrices match!" << endl;
+}
+
 
 void launch_matrix_add(float*, float*, float*, int, int); 
+void launch_matmul(const float *A, const float *B, float *result, int M, int N, int K); 

@@ -1,7 +1,16 @@
 
 __global__ void reduce0(float* device_input_data, float* device_out){
 
+    // if(tid % 2 == 0){ 0 2 4 6
+    //     device_input_data[tid] += device_input_data[tid + 1];
+    // }
+    // if(tid % 2 == 4){ 0 4
+    //     device_input_data[tid] += device_input_data[tid + 2];
+    // if(tid % 2 == 4){ 0
+    //     device_input_data[tid] += device_input_data[tid + 2];
 
+    // get start index of each block
+    // device_input_data: pointer to the original input data
     float * input_data_begin_per_block = device_input_data + blockIdx.x * blockDim.x; 
 
 
@@ -13,15 +22,6 @@ __global__ void reduce0(float* device_input_data, float* device_out){
     }
     if(threadIdx.x == 0)
         device_out[blockIdx.x] = input_data_begin_per_block[0];
-    // if(tid % 2 == 0){ 0 2 4 6
-    //     device_input_data[tid] += device_input_data[tid + 1];
-    // }
-    // if(tid % 2 == 4){ 0 4
-    //     device_input_data[tid] += device_input_data[tid + 2];
-    // if(tid % 2 == 4){ 0
-    //     device_input_data[tid] += device_input_data[tid + 2];
-    
-
 }
 
 
