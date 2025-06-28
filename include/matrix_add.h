@@ -7,6 +7,11 @@
 using std::cout;
 using std::endl;
 
+enum class matmulCalType : uint8_t{
+    naive = 0,
+    tiled = 1,
+};
+
 void init_matrix(float *matrix, int nx, int ny){
     for(int row = 0; row < nx; row++){
         for(int col = 0; col < ny; col++){ 

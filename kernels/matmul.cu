@@ -27,10 +27,21 @@ __global__ void matmul_kernel_tile(const float *A, const float *B, float *result
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int col = blockIdx.x * blockDim.x + threadIdx.x; 
     float resultValue = 0.f;
-    for(int m = 0; m < K / TileWidth; m++){
+    for(int m = 0; m < (K + TileWidth - 1) / TileWidth; m++){
         // fill data in subTiledA and B
-        subTiledA[threadIdx.y][threadIdx.x] = A[row * K + m * TileWidth + threadIdx.x];    //A[row][m * TileWidth + threadIdx.x]; 
-        subTiledB[threadIdx.y][threadIdx.x] = B[col * K + m * TileWidth + threadIdx.y]; 
+        int a_row = row;
+        int a_col = m * TileWidth + threadIdx.x;
+        if(a_row < M && a_col < K)
+            subTiledA[threadIdx.y][threadIdx.x] = A[row * K + m * TileWidth + threadIdx.x];    //A[row][m * TileWidth + threadIdx.x]; 
+        else
+            subTiledA[threadIdx.y][threadIdx.x] = 0.f;
+
+        int b_row = m * TileWidth + threadIdx.y;
+        int b_col = col;
+        if(b_row < K && b_col < N)
+            subTiledB[threadIdx.y][threadIdx.x] = B[col * K + m * TileWidth + threadIdx.y]; 
+        else    
+            subTiledB[threadIdx.y][threadIdx.x] = 0.f;
         __syncthreads(); // wait all threads in this block  finish loading data from global memory
         // calc value
         for(int i = 0; i < TileWidth; i++){
@@ -38,7 +49,8 @@ __global__ void matmul_kernel_tile(const float *A, const float *B, float *result
         }
         __syncthreads(); // wait all the m-th subtile cal done
     } 
-    result[row * N + col] = resultValue; 
+    if(row < M && col < N)
+        result[row * N + col] = resultValue; 
      
     
 }

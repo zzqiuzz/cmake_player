@@ -3,12 +3,13 @@
 using std::cout;
 using std::endl;
 
-#define M 256
-#define N 512
+#define M 270
+#define N 513
 #define K 64
 
 int main(int argc, char *argv[]){
 
+    matmulCalType cal_type = matmulCalType::tiled;
     float a[M][K];
     float b[N][K]; // notice row major or col major
     float result[M][N] = {0.f};
@@ -28,10 +29,12 @@ int main(int argc, char *argv[]){
     cudaMemcpy(d_b, b, N * K * sizeof(float), cudaMemcpyHostToDevice); 
 
     // launch kernel
-    if(0)
+    if(cal_type == matmulCalType::naive)
         launch_matmul_naive(d_a, d_b, d_result, M, N, K);
-    else
+    else if((cal_type == matmulCalType::tiled))
         launch_matmul_tiled(d_a, d_b, d_result, M, N, K);
+    else
+        throw("Not implemented.");
 
     cudaMemcpy(result_d2h, d_result, M * N * sizeof(float), cudaMemcpyDeviceToHost);
 
