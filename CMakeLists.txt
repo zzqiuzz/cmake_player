@@ -26,6 +26,9 @@ target_compile_options(vector_add PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-g -G>)
 add_executable(matrix_add examples/matrix_add.cpp kernels/matrix_add.cu) 
 target_compile_options(matrix_add PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-g -G>)
 
+add_executable(matrix_tran examples/matrix_trans.cpp kernels/matrix_trans.cu) 
+target_compile_options(matrix_tran PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-g -G>)
+
 add_executable(matmul examples/matmul.cpp kernels/matmul.cu) 
 target_compile_options(matmul PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-g -G>)
 

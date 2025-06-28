@@ -1,5 +1,5 @@
 #include <iostream>
-#include <matrix_add.h>
+#include <matrix_helper.h>
 using std::cout;
 using std::endl;
 
@@ -38,7 +38,7 @@ int main(int argc, char *argv[]){
 
     cudaMemcpy(result_d2h, d_result, M * N * sizeof(float), cudaMemcpyDeviceToHost);
 
-    check((float*)result, (float*)result_d2h, M, N, K);
+    check((float*)result, (float*)result_d2h, M, N);
     cudaFree(d_a);
     cudaFree(d_b);
     cudaFree(d_result); 

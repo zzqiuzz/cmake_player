@@ -16,7 +16,7 @@ enum class matmulCalType : uint8_t{
 void init_matrix(float *matrix, int nx, int ny){
     for(int row = 0; row < nx; row++){
         for(int col = 0; col < ny; col++){ 
-            matrix[row * ny + col] = 1.f;
+            matrix[row * ny + col] = 1.f + row % 32;
         }
     }
     std::cout << "Matrix initialized" << std::endl;
@@ -32,7 +32,7 @@ void print_matrix(float *matrix, int nx, int ny){
     } 
 }
 
-void matmul_cpu(float *a, float *b, float *result, int m, int n, int k) {
+void matmul_cpu(const float *a, const float *b, float *result, int m, int n, int k) {
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
             result[i * n + j] = 0.0f;
@@ -43,7 +43,16 @@ void matmul_cpu(float *a, float *b, float *result, int m, int n, int k) {
     }
 }
 
-void check(float *a, float *b, int m, int n, int k) {
+void matmul_trans_cpu(const float *a, float *trans_a, int  M, int N) {
+    for(int n = 0; n < N; n++){
+        for(int m = 0; m < M; m++){
+            trans_a[n * M + m] = a[m * N + n];
+        }
+    }
+     
+}
+
+void check(float *a, float *b, int m, int n) {
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
             if (a[i * n + j] != b[i * n + j]) {
@@ -60,3 +69,4 @@ void check(float *a, float *b, int m, int n, int k) {
 void launch_matrix_add(float*, float*, float*, int, int); 
 void launch_matmul_naive(const float *A, const float *B, float *result, int M, int N, int K); 
 void launch_matmul_tiled(const float *A, const float *B, float *result, int M, int N, int K); 
+void launch_matrix_trans(const float *matrix_dev, float *matrix_trans_dev, int M, int N); 
