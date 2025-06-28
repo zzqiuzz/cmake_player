@@ -3,9 +3,9 @@
 using std::cout;
 using std::endl;
 
-#define M 270
+#define M 255
 #define N 513
-#define K 64
+#define K 65
 
 int main(int argc, char *argv[]){
 

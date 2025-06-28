@@ -1,5 +1,7 @@
-#define TileWidth 16
-
+#define TileWidth 16 
+#include <iostream>
+using std::cout;
+using std::endl;
 __global__ void matmul_kernel_base(const float *A, const float *B, float *result, int M, int N, int K) {
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int col = blockIdx.x * blockDim.x + threadIdx.x;
@@ -40,12 +42,13 @@ __global__ void matmul_kernel_tile(const float *A, const float *B, float *result
         int b_col = col;
         if(b_row < K && b_col < N)
             subTiledB[threadIdx.y][threadIdx.x] = B[col * K + m * TileWidth + threadIdx.y]; 
+            // subTiledB[threadIdx.y][threadIdx.x] = B[b_row * K + b_col]; 
         else    
             subTiledB[threadIdx.y][threadIdx.x] = 0.f;
         __syncthreads(); // wait all threads in this block  finish loading data from global memory
         // calc value
         for(int i = 0; i < TileWidth; i++){
-            resultValue += subTiledA[threadIdx.y][m] * subTiledB[m][threadIdx.x];
+            resultValue += subTiledA[threadIdx.y][i] * subTiledB[i][threadIdx.x];
         }
         __syncthreads(); // wait all the m-th subtile cal done
     } 
@@ -57,7 +60,10 @@ __global__ void matmul_kernel_tile(const float *A, const float *B, float *result
 
 void launch_matmul_tiled(const float *A, const float *B, float *result, int M, int N, int K){
     dim3 block(TileWidth, TileWidth);
-    dim3 grid((N + TileWidth - 1) / TileWidth, (M + TileWidth - 1) / TileWidth);
+    dim3 grid((N + TileWidth - 1) / TileWidth, (M + TileWidth - 1) / TileWidth); 
+    cout << "block.x = " << block.x << " block.y = " << block.y << " block.z = " << block.z << endl;
+    cout << "grid.x = " << grid.x << " grid.y= " << grid.y << " grid.z = " << grid.z;
+    cout << endl;
     matmul_kernel_tile<<<grid, block>>>(A, B, result, M, N, K);
     cudaDeviceSynchronize();
 }

@@ -6,6 +6,7 @@
 #include<iostream> 
 using std::cout;
 using std::endl;
+#define TileWidth 16
 
 enum class matmulCalType : uint8_t{
     naive = 0,
