@@ -10,7 +10,7 @@ using std::endl;
 int main(int argc, char *argv[]){
 
     float a[M][K];
-    float b[N][K];
+    float b[K][N]; // notice row major or col major
     float result[M][N] = {0.f};
     init_matrix((float*)a, M, K);
     init_matrix((float*)b, N, K);
@@ -27,7 +27,10 @@ int main(int argc, char *argv[]){
     cudaMemcpy(d_b, b, N * K * sizeof(float), cudaMemcpyHostToDevice); 
 
     // launch kernel
-    launch_matmul(d_a, d_b, d_result, M, N, K);
+    if(0)
+        launch_matmul_naive(d_a, d_b, d_result, M, N, K);
+    else
+        launch_matmul_tiled(d_a, d_b, d_result, M, N, K);
 
     cudaMemcpy(result_d2h, d_result, M * N * sizeof(float), cudaMemcpyDeviceToHost);
 

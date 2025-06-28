@@ -52,4 +52,5 @@ void check(float *a, float *b, int m, int n, int k) {
 
 
 void launch_matrix_add(float*, float*, float*, int, int); 
-void launch_matmul(const float *A, const float *B, float *result, int M, int N, int K); 
+void launch_matmul_naive(const float *A, const float *B, float *result, int M, int N, int K); 
+void launch_matmul_tiled(const float *A, const float *B, float *result, int M, int N, int K); 
