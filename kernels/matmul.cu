@@ -1,5 +1,5 @@
 #define TileWidth 32 
-#define TileKWidth 16 
+#define TileKWidth 32 // 32
 #define TileMWidth 32 
 #define TileNWidth 32 
 #include <iostream>
@@ -10,14 +10,17 @@ __global__ void matmul_kernel_base(const float *A, const float *B, float *result
     int col = blockIdx.x * blockDim.x + threadIdx.x;
     for(int i = 0; i< K; i++){
         if(row < M && col < N)
-            result[row * N + col] += A[row * K + i] * B[col * K + i];
+            result[row * N + col] += A[row * K + i] * B[i * N + col];
     }
     
 }
 
 void launch_matmul_naive(const float *A, const float *B, float *result, int M, int N, int K){
     dim3 block(TileWidth, TileWidth);
-    dim3 grid((M + TileWidth - 1) / TileWidth, (N + TileWidth - 1) / TileWidth);
+    dim3 grid((N + TileWidth - 1) / TileWidth, (M + TileWidth - 1) / TileWidth);
+    cout << "block.x = " << block.x << " block.y = " << block.y << " block.z = " << block.z << endl;
+    cout << "grid.x = " << grid.x << " grid.y= " << grid.y << " grid.z = " << grid.z;
+    cout << endl;
     matmul_kernel_base<<<grid, block>>>(A, B, result, M, N, K);
     cudaDeviceSynchronize();
 }

@@ -5,7 +5,7 @@ using std::endl;
 
 #define M 257
 #define N 511
-#define K 63
+#define K 65
 
 int main(int argc, char *argv[]){
 
