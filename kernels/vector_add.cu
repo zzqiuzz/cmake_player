@@ -1,6 +1,21 @@
 // vector_add.cu
 #include <cuda_runtime.h>
 #include <iostream>
+/*
+if n = 100000; block_size = 256; gridDim.x = n / block_size / 5 (e.g)
+n的个数特别大，以至于gridDim.x * blocksize覆盖不了整个n，因此每个线程就需要多处理元素了，这里用+=stride来处理
+__global__ void vectorAdd(int* a, int* b, int* c, int n) { 
+    int index = blockIdx.x * blockDim.x + threadIdx.x;
+    int stride = blockDim.x * gridDim.x;
+    for (int i = index; i < n; i += stride)
+        y[i] = x[i] + y[i];
+}
+            index                                                          stride = blockDim.x * gridDim.x
+    [---------*------,--------------,--------------,----------------,=========*===============================] totally N elements
+    <---blockDim.x--->
+    <------------------------------gridDim.x------------------------>
+ */
+
 
 // CUDA核函数：两个向量相加
 __global__ void vectorAdd(int* a, int* b, int* c, int n) { 
