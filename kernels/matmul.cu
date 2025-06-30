@@ -29,7 +29,7 @@ void launch_matmul_naive(const float *A, const float *B, float *result, int M, i
 
 __global__ void matmul_kernel_tile(const float *A, const float *B, float *result, int M, int N, int K) {
     // define shared memory  equals to block shape
-    __shared__ float subTiledA[TileMWidth][TileKWidth]; // 32 x 16
+    __shared__ float subTiledA[TileMWidth][TileKWidth]; // 32 x 16  may exist bank conflicts !
     __shared__ float subTiledB[TileKWidth][TileNWidth]; // 16 x 32
 
     int row = blockIdx.y * blockDim.y + threadIdx.y;

@@ -69,4 +69,6 @@ void check(float *a, float *b, int m, int n) {
 void launch_matrix_add(float*, float*, float*, int, int); 
 void launch_matmul_naive(const float *A, const float *B, float *result, int M, int N, int K); 
 void launch_matmul_tiled(const float *A, const float *B, float *result, int M, int N, int K); 
-void launch_matrix_trans(const float *matrix_dev, float *matrix_trans_dev, int M, int N); 
+void launch_matrix_trans_write_coalesced(const float *matrix_dev, float *matrix_trans_dev, int M, int N); 
+void launch_matrix_trans_read_coalesced(const float *matrix_dev, float *matrix_trans_dev, int M, int N); 
+void launch_matrix_trans_read_write_coalesced(const float *matrix_dev, float *matrix_trans_dev, int M, int N); 
