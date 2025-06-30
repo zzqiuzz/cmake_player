@@ -13,7 +13,7 @@ __global__ void vectorAdd(int* a, int* b, int* c, int n) {
             index                                                          stride = blockDim.x * gridDim.x
     [---------*------,--------------,--------------,----------------,=========*===============================] totally N elements
     <---blockDim.x--->
-    <------------------------------gridDim.x------------------------>
+    <-------------------gridDim.x * blockDim.x--------------------->
  */
 
 
